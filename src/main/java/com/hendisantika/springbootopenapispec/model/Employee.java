@@ -1,5 +1,8 @@
 package com.hendisantika.springbootopenapispec.model;
 
+import com.squareup.moshi.Json;
+import lombok.Data;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : springboot-open-api-spec
@@ -9,5 +12,15 @@ package com.hendisantika.springbootopenapispec.model;
  * Date: 06/11/20
  * Time: 08.38
  */
-public class Employee {
+@Data
+public class Employee extends EmployeeRequest {
+
+    @Json(name = "id")
+    private String id;
+
+    public Employee() {
+        super();
+        id = null;
+    }
+
 }
