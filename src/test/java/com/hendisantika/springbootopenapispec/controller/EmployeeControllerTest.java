@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Created by IntelliJ IDEA.
@@ -118,6 +119,31 @@ class EmployeeControllerTest {
                 Employee.class);
         Assertions.assertEquals(HttpStatus.OK, entity.getStatusCode());
         Assertions.assertEquals(originalEmployee.getId(), entity.getBody().getId());
+        Assertions.assertNotEquals(originalEmployee.getFirstName(), entity.getBody().getFirstName());
+        Assertions.assertNotEquals(originalEmployee.getLastName(), entity.getBody().getLastName());
+    }
+
+    @Test
+    void updateNonExistingEmployee() {
+        EmployeeRequest request = new EmployeeRequest();
+        request.setFirstName("Uzumaki");
+        request.setLastName("Naruto");
+        HttpEntity<EmployeeRequest> httpEntity = new HttpEntity<>(request, httpHeaders);
+        ResponseEntity<Employee> responseEntity = new TestRestTemplate().postForEntity(baseUrl, httpEntity,
+                Employee.class);
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        Employee originalEmployee = responseEntity.getBody();
+
+        Employee updatedEmployee = new Employee();
+        updatedEmployee.setId(UUID.randomUUID().toString());
+        request.setFirstName("Uzumaki");
+        request.setLastName("Naruto");
+
+        httpEntity = new HttpEntity<>(updatedEmployee, httpHeaders);
+        ResponseEntity<Employee> entity = new TestRestTemplate().exchange(baseUrl, HttpMethod.PUT, httpEntity,
+                Employee.class);
+        Assertions.assertEquals(HttpStatus.CREATED, entity.getStatusCode());
+        Assertions.assertNotEquals(originalEmployee.getId(), entity.getBody().getId());
         Assertions.assertNotEquals(originalEmployee.getFirstName(), entity.getBody().getFirstName());
         Assertions.assertNotEquals(originalEmployee.getLastName(), entity.getBody().getLastName());
     }
