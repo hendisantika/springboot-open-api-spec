@@ -4,6 +4,7 @@ import com.hendisantika.springbootopenapispec.model.Employee;
 import com.hendisantika.springbootopenapispec.model.EmployeeRequest;
 import com.hendisantika.springbootopenapispec.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,9 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -59,5 +63,25 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(employee);
     }
 
+    /**
+     * Endpoint to get all employees
+     *
+     * @return
+     */
+    @GetMapping("/employees")
+    @Operation(summary = "Get all Employees")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All Employees returned", content = {@Content(mediaType
+                    = "application/json", array = @ArraySchema(schema = @Schema(implementation = Employee.class)))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = {@Content(schema =
+            @Schema(hidden = true))}),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content(schema =
+            @Schema(hidden = true))})
+    })
+    public ResponseEntity<List<Employee>> getAllEmployees() {
+        List<Employee> employeeList = employeeService.getEmployees();
+        logger.info("TIMESTAMP:{}:Get all Employee:Count - {}", System.currentTimeMillis(), employeeList.size());
+        return ResponseEntity.ok(employeeList);
+    }
 
 }
