@@ -1,10 +1,20 @@
 package com.hendisantika.springbootopenapispec.controller;
 
+import com.hendisantika.springbootopenapispec.model.Employee;
+import com.hendisantika.springbootopenapispec.model.EmployeeRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Objects;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,5 +47,18 @@ class EmployeeControllerTest {
         httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         System.out.println("Headers are set");
+    }
+
+    @Test
+    void addNewEmployee() {
+        EmployeeRequest request = new EmployeeRequest();
+        request.setFirstName("Uzumaki");
+        request.setLastName("Naruto");
+        HttpEntity<EmployeeRequest> httpEntity = new HttpEntity<>(request, httpHeaders);
+        ResponseEntity<Employee> responseEntity = new TestRestTemplate().postForEntity(baseUrl, httpEntity,
+                Employee.class);
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        Assertions.assertEquals(Boolean.FALSE, Objects.requireNonNull(responseEntity.getBody()).getId().isEmpty());
+
     }
 }
