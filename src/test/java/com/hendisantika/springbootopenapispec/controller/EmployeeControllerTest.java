@@ -97,4 +97,29 @@ class EmployeeControllerTest {
         Assertions.assertEquals(request.getLastName(), entity.getBody().getLastName());
     }
 
+    @Test
+    void updateExistingEmployee() {
+        EmployeeRequest request = new EmployeeRequest();
+        request.setFirstName("Uzumaki");
+        request.setLastName("Naruto");
+        HttpEntity<EmployeeRequest> httpEntity = new HttpEntity<>(request, httpHeaders);
+        ResponseEntity<Employee> responseEntity = new TestRestTemplate().postForEntity(baseUrl, httpEntity,
+                Employee.class);
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        Employee originalEmployee = responseEntity.getBody();
+
+        Employee updatedEmployee = new Employee();
+        updatedEmployee.setId(originalEmployee.getId());
+        request.setFirstName("Uchiha");
+        request.setLastName("Sasuke");
+
+        httpEntity = new HttpEntity<>(updatedEmployee, httpHeaders);
+        ResponseEntity<Employee> entity = new TestRestTemplate().exchange(baseUrl, HttpMethod.PUT, httpEntity,
+                Employee.class);
+        Assertions.assertEquals(HttpStatus.OK, entity.getStatusCode());
+        Assertions.assertEquals(originalEmployee.getId(), entity.getBody().getId());
+        Assertions.assertNotEquals(originalEmployee.getFirstName(), entity.getBody().getFirstName());
+        Assertions.assertNotEquals(originalEmployee.getLastName(), entity.getBody().getLastName());
+    }
+
 }
