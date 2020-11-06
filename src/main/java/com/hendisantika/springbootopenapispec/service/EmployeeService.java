@@ -3,6 +3,8 @@ package com.hendisantika.springbootopenapispec.service;
 import com.hendisantika.springbootopenapispec.model.Employee;
 import com.hendisantika.springbootopenapispec.model.EmployeeRequest;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : springboot-open-api-spec
@@ -20,4 +22,35 @@ public interface EmployeeService {
      * @return
      */
     Employee addNewEmployee(EmployeeRequest request);
+
+    /**
+     * Method returns list of employees in Employee Store
+     *
+     * @return
+     */
+    List<Employee> getEmployees();
+
+    /**
+     * Given an employee id, return employee details
+     *
+     * @param employeeId
+     * @return
+     */
+    Employee getEmployee(String employeeId);
+
+    /**
+     * Method to delete employee
+     *
+     * @param employeeId
+     * @return
+     */
+    Employee removeEmployee(String employeeId);
+
+    /**
+     * Given an employee identified by id, update employee name
+     *
+     * @param employee
+     * @return
+     */
+    Employee updateEmployee(Employee employee);
 }
