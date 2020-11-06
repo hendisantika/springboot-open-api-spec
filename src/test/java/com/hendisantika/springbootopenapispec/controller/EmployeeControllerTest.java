@@ -148,4 +148,23 @@ class EmployeeControllerTest {
         Assertions.assertNotEquals(originalEmployee.getLastName(), entity.getBody().getLastName());
     }
 
+    @Test
+    void deleteEmployee() {
+        EmployeeRequest request = new EmployeeRequest();
+        request.setFirstName("Haruno");
+        request.setLastName("Sakura");
+        HttpEntity<EmployeeRequest> httpEntity = new HttpEntity<>(request, httpHeaders);
+        ResponseEntity<Employee> responseEntity = new TestRestTemplate().postForEntity(baseUrl, httpEntity,
+                Employee.class);
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+
+        String url = baseUrl + "/" + responseEntity.getBody().getId();
+        System.out.println(url);
+
+        ResponseEntity<Employee> entity = new TestRestTemplate().exchange(url, HttpMethod.DELETE,
+                new HttpEntity<>(httpHeaders), Employee.class);
+        Assertions.assertEquals(HttpStatus.OK, entity.getStatusCode());
+        Assertions.assertEquals(request.getFirstName(), entity.getBody().getFirstName());
+        Assertions.assertEquals(request.getLastName(), entity.getBody().getLastName());
+    }
 }
