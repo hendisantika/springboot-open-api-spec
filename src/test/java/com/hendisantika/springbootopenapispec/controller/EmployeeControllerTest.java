@@ -1,8 +1,10 @@
 package com.hendisantika.springbootopenapispec.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,4 +27,15 @@ class EmployeeControllerTest {
 
     private HttpHeaders httpHeaders;
 
+    @BeforeEach
+    void setUp() {
+
+        System.out.println("API PORT :" + randomServerPort);
+        baseUrl = "http://127.0.0.1:" + randomServerPort + contextRoot + "/employees";
+        System.out.println("BASE URL :" + baseUrl);
+
+        httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        System.out.println("Headers are set");
+    }
 }
