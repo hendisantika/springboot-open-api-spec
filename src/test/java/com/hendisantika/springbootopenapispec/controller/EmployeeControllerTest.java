@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,23 @@ class EmployeeControllerTest {
                 Employee.class);
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Assertions.assertEquals(Boolean.FALSE, Objects.requireNonNull(responseEntity.getBody()).getId().isEmpty());
-
     }
+
+    @Test
+    void getAllEmployees() {
+        EmployeeRequest request = new EmployeeRequest();
+        request.setFirstName("Uzumaki");
+        request.setLastName("Naruto");
+        HttpEntity<EmployeeRequest> httpEntity = new HttpEntity<>(request, httpHeaders);
+        ResponseEntity<Employee> responseEntity = new TestRestTemplate().postForEntity(baseUrl, httpEntity,
+                Employee.class);
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+
+        ResponseEntity<Object[]> entity = new TestRestTemplate().exchange(baseUrl, HttpMethod.GET,
+                new HttpEntity<>(httpHeaders), Object[].class);
+        Assertions.assertEquals(HttpStatus.OK, entity.getStatusCode());
+        Assertions.assertEquals(Boolean.TRUE, entity.getBody().length >= 1);
+    }
+
+
 }
