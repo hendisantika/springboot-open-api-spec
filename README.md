@@ -50,4 +50,28 @@ Below section describes how to configure application.properties file to override
         > `springdoc.swagger-ui.path`=/swagger-ui.html
     - disable default petstore Swagger
         > `springdoc.swagger-ui.disable-swagger-default-url`=true
+## Images Screen shot
 
+Swagger UI Home Page
+
+![Swagger UI Home Page](img/home.png "Swagger UI Home Page")
+
+Add New Person
+
+![Add New Person](img/add.png "Add New Person")
+
+List All Person
+
+![List All Person](img/list.png "List All Person")
+
+Update Person by ID
+
+![Update Person by ID](img/update.png "Update Person by ID")
+
+Get Person by ID
+
+![Get Person by ID](img/find.png "Get Person by ID")
+
+Delete Person
+
+![Delete Person](img/delete.png "Delete Person")
